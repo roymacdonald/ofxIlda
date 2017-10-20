@@ -85,8 +85,8 @@ public:
             parameters.add(params.draw.pointNumbers.set("Draw Point nums", false));
             
             parameters.add(params.output.color.set("Color", {1., 1., 1., 1.}, {0.,0.,0.,0.}, {1., 1., 1., 1.}));
-            parameters.add(params.output.blankCount.set("Blank Count",30));
-            parameters.add(params.output.endCount.set("End Count", 30));
+            parameters.add(params.output.blankCount.set("Blank Count",30, 0, 100));
+            parameters.add(params.output.endCount.set("End Count", 30, 0, 100));
             parameters.add(params.output.doCapX.set("Do Cap X", false));
             parameters.add(params.output.doCapY.set("Do Cap Y", false));
             
