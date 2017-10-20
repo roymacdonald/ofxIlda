@@ -103,7 +103,7 @@ namespace ofxIlda {
             
             ofVec2f normalizer(1.0f/contourFinder.getWidth(), 1.0f/contourFinder.getHeight());
             for(int i=0; i<contourFinder.blobs.size(); i++) {
-                vector<ofPoint> &pts = contourFinder.blobs[i].pts;
+                vector<glm::vec3> &pts = contourFinder.blobs[i].pts;
                 ofPolyline &poly = ildaFrame.addPoly();
                 for(int j=0; j<pts.size(); j++) {
                     poly.lineTo(pts[j] * normalizer);  // coordinates are 0...1
@@ -133,7 +133,7 @@ namespace ofxIlda {
                 ofSetColor(255, 0, 0);
                 ofNoFill();
                 for(int i=0; i<contourFinder.blobs.size(); i++ ) {
-                    vector<ofPoint> &pts = contourFinder.blobs[i].pts;
+                    vector<glm::vec3> &pts = contourFinder.blobs[i].pts;
                     ofBeginShape();
                     for(int j=0; j<pts.size(); j++) {
                         ofVertex(pts[j].x, pts[j].y);
