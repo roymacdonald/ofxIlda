@@ -115,7 +115,7 @@ namespace ofxIlda {
             // get stats
             stats.pointCountOrig = 0;
             stats.pointCountProcessed = 0;
-            for(int i=0; i<processedPolys.size(); i++) {
+            for(size_t i=0; i<processedPolys.size(); i++) {
                 stats.pointCountOrig += origPolys[i].size();
                 stats.pointCountProcessed += processedPolys[i].size();
             }
@@ -136,15 +136,15 @@ namespace ofxIlda {
             
             if(params.draw.lines) {
                 ofSetLineWidth(2);
-                for(int i=0; i<processedPolys.size(); i++) {
+                for(size_t i=0; i<processedPolys.size(); i++) {
                     ofPolyline &poly = processedPolys[i];
 					ofFloatColor &pcolor = processedPolys[i].color;
 					ofSetColor(pcolor.r*255, pcolor.g*255, pcolor.b*255);
                     poly.draw();
-                    //            for(int i=0; i<data.size(); i++) {
-                    //                ofPoint p0 = data[i];
+                    //            for(size_t i=0; i<data.size(); i++) {
+                    //                glm::vec3 p0 = data[i];
                     //                if(i < data.size()-1) {
-                    //                    ofPoint p1 = data[i+1];
+                    //                    glm::vec3 p1 = data[i+1];
                     ////                    ofSetColor(p1.r * 255, p1.g * 255, p1.b * 255, p1.a * 255);
                     //                    ofDrawLine(p0.x, p0.y, p1.x, p1.y);
                     //                }
@@ -152,21 +152,21 @@ namespace ofxIlda {
                 }
             }
             if(params.draw.points) {
-                glPointSize(5);
-                for(int i=0; i<processedPolys.size(); i++) {
-                    ofPolyline &poly = processedPolys[i];
-                    ofFloatColor &pcolor = processedPolys[i].color;
-					ofSetColor(pcolor.r*255, pcolor.g*255, pcolor.b*255);
-                    
-					glBegin(GL_POINTS);
-                    for(int i=0; i<poly.size(); i++) {
-                        ofPoint &p = poly[i];
-                        //                Point &p = data[i];
-                        //                ofSetColor(p.r * 255, p.g * 255, p.b * 255, p.a * 255);
-                        glVertex2f(p.x, p.y);
-                    }
-                    glEnd();
-                }
+//                glPointSize(5);
+//                for(size_t i=0; i<processedPolys.size(); i++) {
+//                    ofPolyline &poly = processedPolys[i];
+//                    ofFloatColor &pcolor = processedPolys[i].color;
+//					ofSetColor(pcolor.r*255, pcolor.g*255, pcolor.b*255);
+//                    
+//					glBegin(GL_POINTS);
+//                    for(size_t i=0; i<poly.size(); i++) {
+//                        auto &p = poly[i];
+//                        //                Point &p = data[i];
+//                        //                ofSetColor(p.r * 255, p.g * 255, p.b * 255, p.a * 255);
+//                        glVertex2f(p.x, p.y);
+//                    }
+//                    //glEnd();
+//                }
             }
             
             ofPopMatrix();
@@ -206,29 +206,29 @@ namespace ofxIlda {
         }
 
         //--------------------------------------------------------------
-        Poly& addPoly(const vector<ofPoint> points) {
+        Poly& addPoly(const vector<glm::vec3> points) {
             return addPoly(Poly(points));
         }
         
         //--------------------------------------------------------------
-        Poly& addPoly(const vector<ofPoint> points, ofFloatColor color) {
+        Poly& addPoly(const vector<glm::vec3> points, ofFloatColor color) {
             return addPoly(Poly(points, color));
         }
         
         //--------------------------------------------------------------
         void addPolys(const vector<ofPolyline> &polylines) {
-            for(int i=0; i<polylines.size(); i++) addPoly(polylines[i]);
+            for(size_t i=0; i<polylines.size(); i++) addPoly(polylines[i]);
         }
         
         //--------------------------------------------------------------
         void addPolys(const vector<ofPolyline> &polylines, ofFloatColor color) {
-            for(int i=0; i<polylines.size(); i++) addPoly(polylines[i], color);
+            for(size_t i=0; i<polylines.size(); i++) addPoly(polylines[i], color);
         }
 
         
         //--------------------------------------------------------------
         void addPolys(const vector<Poly> &polys) {
-            for(int i=0; i<polys.size(); i++) addPoly(polys[i]);
+            for(size_t i=0; i<polys.size(); i++) addPoly(polys[i]);
         }
         
         //--------------------------------------------------------------
@@ -281,20 +281,20 @@ namespace ofxIlda {
         }
 
         //--------------------------------------------------------------
-        ofPoint transformPoint(ofPoint p) const {
+        glm::vec3 transformPoint(glm::vec3 p) const {
             // flip
             if(params.output.transform.doFlipX) p.x = 1 - p.x;
             if(params.output.transform.doFlipY) p.y = 1 - p.y;
             
             // scale
-            if(params.output.transform.scale.lengthSquared() > 0) {
-                p -= ofPoint(0.5, 0.5);
-                p *= params.output.transform.scale;
-                p += ofPoint(0.5, 0.5);
+            if(glm::length2(params.output.transform.scale.get()) > 0) {
+                p -= glm::vec3(0.5, 0.5, 0);
+                p *= glm::vec3(params.output.transform.scale.get(),0);
+                p += glm::vec3(0.5, 0.5, 0);
             }
             
             // offset
-            p += params.output.transform.offset;
+            p += glm::vec3(params.output.transform.offset.get(), 0);
             
 
 
@@ -318,14 +318,14 @@ namespace ofxIlda {
         //--------------------------------------------------------------
         void updateFinalPoints() {
             points.clear();
-            for(int i=0; i<processedPolys.size(); i++) {
+            for(size_t i=0; i<processedPolys.size(); i++) {
                 ofPolyline &poly = processedPolys[i];
                 ofFloatColor &pcolor = processedPolys[i].color;
                 
                 if(poly.size() > 0) {
                     
-                    ofPoint startPoint = transformPoint(poly.getVertices().front());
-                    ofPoint endPoint = transformPoint(poly.getVertices().back());
+                    glm::vec3 startPoint = transformPoint(poly.getVertices().front());
+                    glm::vec3 endPoint = transformPoint(poly.getVertices().back());
                     
                     // blanking at start
                     for(int n=0; n<params.output.blankCount; n++) {
