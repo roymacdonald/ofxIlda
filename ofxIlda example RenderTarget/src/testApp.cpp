@@ -60,7 +60,7 @@ void testApp::setup(){
     gui.addToggle("doDrawIldaPointNumbers", ildaFrame.params.draw.pointNumbers);
     
     gui.addTitle("OUTPUT");
-    gui.addColorPicker("color", ildaFrame.params.output.color);
+    gui.addColorPicker("color", ildaFrame.params.output.color.v);
     gui.addSlider("blankCount", ildaFrame.params.output.blankCount, 0, 100);
     gui.addSlider("endCount", ildaFrame.params.output.endCount, 0, 100);
     gui.addToggle("doCapX", ildaFrame.params.output.doCapX);

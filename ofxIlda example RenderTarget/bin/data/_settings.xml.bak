@@ -73,15 +73,15 @@
     </SliderInt_path.targetPointCount>
     <SliderFloat_path.spacing>
         <name>path.spacing</name>
-        <value>0.003998857</value>
+        <value>0.008001034</value>
     </SliderFloat_path.spacing>
     <SliderInt_stats.pointCountOrig>
         <name>stats.pointCountOrig</name>
-        <value>817</value>
+        <value>1838</value>
     </SliderInt_stats.pointCountOrig>
     <SliderInt_stats.pointCountProcessed>
         <name>stats.pointCountProcessed</name>
-        <value>701</value>
+        <value>702</value>
     </SliderInt_stats.pointCountProcessed>
     <Toggle_doDrawFbo>
         <name>doDrawFbo</name>
