@@ -50,7 +50,7 @@ namespace ofxIlda {
         
         //--------------------------------------------------------------
         // set color and position mapped from custom range (defaults to normalized)
-        void set(glm::vec3 p, ofFloatColor c, glm::vec3 pmin = {0,0,0}, glm::vec3 pmax = {1,1,1}) {
+        void set(const glm::vec3& p, ofFloatColor c, const glm::vec3& pmin = {0,0,0}, const glm::vec3& pmax = {1,1,1}) {
             set(
                 ofMap(p.x, pmin.x, pmax.x, kIldaMinPoint, kIldaMaxPoint),
                 ofMap(p.y, pmin.y, pmax.y, kIldaMinPoint, kIldaMaxPoint),
