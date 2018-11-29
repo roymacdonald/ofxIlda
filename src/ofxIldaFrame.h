@@ -80,8 +80,8 @@ public:
 		void setup(){
 			parameters.setName("IldaFrame Params");
 			
-            parameters.add(params.draw.lines.set("Draw Lines", true));
-            parameters.add(params.draw.points.set("Draw Points",true));
+            parameters.add(params.draw.lines.set("Draw Lines", false));
+            parameters.add(params.draw.points.set("Draw Points",false));
             parameters.add(params.draw.pointNumbers.set("Draw Point nums", false));
             
             parameters.add(params.output.color.set("Color", {1., 1., 1., 1.}, {0.,0.,0.,0.}, {1., 1., 1., 1.}));
@@ -93,7 +93,12 @@ public:
             parameters.add(params.output.transform.doFlipX.set("Do Flip X", false));
             parameters.add(params.output.transform.doFlipY.set("Do Flip Y", false));
             parameters.add(params.output.transform.offset.set("Offset", {0, 0}, {-1,-1},{1,1}));
-            parameters.add(params.output.transform.scale.set("Scale", {0, 0}, {0,0},{3,3}));
+            parameters.add(params.output.transform.scale.set("Scale", {1, 1}, {0,0},{3,3}));
+            
+            polyProcessor.setup();
+            parameters.add(polyProcessor.parameters);
+            
+            
 
 		}
         
@@ -148,13 +153,16 @@ public:
             if(w==0) w = ofGetWidth();
             if(h==0) h = ofGetHeight();
             
+			
+			
             ofPushStyle();
             ofPushMatrix();
             ofTranslate(x, y);
             ofScale(w, h);
             
             if(params.draw.lines) {
-                ofSetLineWidth(2);
+//				std::cout << "ofxIldaFrame::draw("<< x << ", "<< y << ", "<< w << ", "<< h <<   ")\n" ;        
+				ofSetLineWidth(2);
                 for(size_t i=0; i<processedPolys.size(); i++) {
                     ofPolyline &poly = processedPolys[i];
 					ofFloatColor &pcolor = processedPolys[i].color;
@@ -171,6 +179,13 @@ public:
                 }
             }
             if(params.draw.points) {
+				ofMesh m;
+				m.setMode(OF_PRIMITIVE_LINE_STRIP);
+				for(auto& p: points){
+					m.addVertex({p.x, p.y,0.0});
+					m.addColor(ofFloatColor(p.r, p.g, p.b, p.a));
+				}
+				m.draw();
 //                glPointSize(5);
 //                for(size_t i=0; i<processedPolys.size(); i++) {
 //                    ofPolyline &poly = processedPolys[i];
