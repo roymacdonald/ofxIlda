@@ -13,25 +13,34 @@
 namespace ofxIlda {
     class PolyProcessor {
     public:
+        ofParameterGroup parameters;
         struct {
-            int smoothAmount;   // how much to smooth the path (zero to ignore)
-            float optimizeTolerance;    // howmuch to optimize the path, based on curvature (zero to ignore)
-            bool collapse;  // (not implemented yet)
-            int targetPointCount;   // how many points in total should ALL paths in this frame be resampled to (zero to ignore)
-            float spacing;  // desired spacing between points. Set automatically by targetPointCount, or set manually. (zero to ignore)
+            ofParameter<int> smoothAmount;   // how much to smooth the path (zero to ignore)
+            ofParameter<float> optimizeTolerance;    // howmuch to optimize the path, based on curvature (zero to ignore)
+            ofParameter<bool> collapse;  // (not implemented yet)
+            ofParameter<int> targetPointCount;   // how many points in total should ALL paths in this frame be resampled to (zero to ignore)
+            ofParameter<float> spacing;  // desired spacing between points. Set automatically by targetPointCount, or set manually. (zero to ignore)
         } params;
         
         
         //--------------------------------------------------------------
         PolyProcessor() {
-            memset(&params, 0, sizeof(params));
+            //memset(&params, 0, sizeof(params));
             params.smoothAmount = 0;
             params.optimizeTolerance = 0;
-            params.collapse = 0;
+            params.collapse = false;
             params.targetPointCount = 500;
             params.spacing = 0;
         }
-        
+        //--------------------------------------------------------------
+        void setup(){
+            parameters.setName("PolyProcessor");
+            parameters.add(params.smoothAmount.set("smoothAmount",0,0,100));
+            parameters.add(params.optimizeTolerance.set("optimizeTolerance",0,0,10));
+            parameters.add(params.collapse.set("collapse",false));
+            parameters.add(params.targetPointCount.set("targetPointCount",500,0,1000));
+            parameters.add(params.spacing.set("spacing",0,0,100));           
+        }
         //--------------------------------------------------------------
         string getString() {
             stringstream s;
